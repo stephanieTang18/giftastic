@@ -1,39 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script rel="text/javascript" href="assets/javascript/app.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-   
-
-    <title>Giftastic</title>
+	<meta charset="UTF-8">
+	<title>GyfTastic</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css"/>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="./assets/css/style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript" src="./assets/javascript/app.js"></script>
 </head>
 
 <body>
-    <div>
-        <h1>Giphy Animal Generator</h1>
-    </div>
+<!-- Form for user input-->
+	<header class="jumbotron">
+		<h1 class="text-center">GIFY JOY</h1>
+		<div class="text-center">
+			<input type="text" id="userInput" placeholder="Add your favorite animal">
+		    <button type="submit" id="submitButton" class="btn btn-dark">Submit</button>
+		</div>
+	</header>
 
-    <div id="gifButtonsContainer">
-        <button data-animal="dogs">Dogs</button>
-        <button data-animal="cats">Cats</button>
-        <button data-animal="rats">Rats</button>
-        <button data-animal="ferrets">Ferrets</button>
-    </div>
-
-    <div id="gifImages"></div>
-
-    <div>
-        <form id="gifForm" role="form"></form>
-        <h2>Pick a Animal</h2>
-        <label for="animal-input">Add your animal of choice: </label>
-        <input type="text" id="animalInput">
-    </div>
-
-    <div>
-        <input type="submit" id="addAnimal">
-    </div>
+<!-- Divs to hold the buttons and gif images-->
+	<div class="container">
+		<div class="row" id="buttons"></div>
+		<div class="row" id="images"></div>
+	</div>
+	
+	
 </body>
 </html>

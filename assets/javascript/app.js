@@ -1,80 +1,107 @@
-var animals = ["dogs", "cats", "rats", "ferrets"];
+$(document).ready(function() {
 
-
-// buttons //
-function gifButtons(){
-    $("#gifButtonsContainer").empty();
-    for (var i = 0; i < animals.length; i++) {
-        var button = $("<button>");
-        button.addClass("animal");
-        button.attr("data-animal", animals[i]);
-        button.text(animal[i]);
-        $("#gifButtonsContainer").append(button);
-    }
-};
-
-// on click function for new buttons // 
-function newButtons(){
-    $("#addAnimal").on("click", function(){
-        event.preventDefault();
-        var animal = $("#animalInput").val().trim();
-        if (animal == "") {
-            return false;
+    //Initial array
+    var animals = ["cat", "dog", "tiger", "lion",];
+    
+    //Clears the button area
+    function renderButtons() {
+        $("#buttons").empty(); 
+    
+    //Creates a button for every item in the initial array
+        for (var i = 0; i < animals.length; i++) {
+            console.log(animals[i]);
+            var button = $("<button>");
+            button.html(animals[i]);
+            button.addClass("btn btn-outline-dark");
+            button.attr("data-name", animals[i]);
+            button.attr("id","animal-button");
+            $("#buttons").append(button);
         }
-        animals.push(animal);
-
-        gifButtons();
-        return false;
-    });
-}
-
-// main part of the page //
-
-$(document).ready(function (){
-    $(document).on("click", "button", function (){
-        var animals = $(this).attr("data-animal");
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + animals + "&api_key=LGj4FHgJTf3phxLdnoyHfG9HgQV7GSBf";
-        
-        $.ajax({
-            url:queryURL,
-            method: "GET"
-        })
-        .then(function (response){
-            $("#gifImages").empty();
-            var results = response.data;
-            if (results == ""){
-                alert("There is no gif for this button");
+    }
+    
+    // Adds every new animal the user inputs to the array of animals
+    $("#submitButton").on("click", function(event) {
+        event.preventDefault();
+        var newAnimal = $("#userInput").val().trim();
+            //Prevents animals buttons being duplicated
+            if (animals.indexOf(newAnimal) === -1) {
+                animals.push(newAnimal);
+                renderButtons();
             }
-
-            for (var i = 0; i < results.length; i++) {
+            else{
+                alert("This animal has already been added to the list!")
+            }
+        
+    });
+    
+    //Displays the gifs each time the Animal button is clicked
+    $(document).on("click", "#animal-button", displayGifs);
+    
+    //Function to display gifs
+    function displayGifs() {
+    
+        //Empties the gif container from any previous images
+        $("#images").empty();
+    
+        var animal = $(this).attr("data-name");
+        console.log(animal);
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=ifiiIU1sMaCVrH2hfhu7npMqAOZ9iMA3";
+    
+        //Ajax call to get response
+        $.ajax({
+            url: queryURL,            
+            method: "GET"
+        }).then(function(response) {
+            console.log(response);
+    
+            //Variable to store the response data
+            var response = response.data;
+    
+            //For loop to go through the responses 
+            //Creates the divs with still images and paragraph for each rating and title
+            for (var i = 0; i < 10; i++) {
                 var gifDiv = $("<div>");
                 gifDiv.addClass("gifDiv");
-                var gifRating = $("<p>").text("Rating: " + results[i].rating);
-                gifDiv.append(gifRating);
+                
+                var rating = response[i].rating;
+                var ratingP = $("<p>").html("Rating: " + rating);
+                ratingP.addClass("text-center");
+    
+                var title = response[i].title;
+                var titleP = $("<p>").html( "Title: " + title);
+                titleP.addClass("text-center");
+    
                 var gifImage = $("<img>");
-                gifImage.attr("class", 'gifyImage');
-                gifImage.attr("src", results[i].images.fixed_height.url);
-                gifImage.attr("data-animate", results[i].images.fixed_height.url);
-                gifImage.attr("data-still", results[i].images.fixed_height_still.url);
-                gifImage.data('state', 'animate');
-                gifImage.data('state', 'still');
+                gifImage.addClass("gif");
+                gifImage.attr("src", response[i].images.fixed_height_still.url);
+                gifImage.attr("data-still", response[i].images.fixed_height_still.url);
+                gifImage.attr("data-animate", response[i].images.fixed_height.url);
+                gifImage.attr("data-state", "still");
+    
+                //Places the imagas and rating data in a div
                 gifDiv.append(gifImage);
-                $("#gifImages").prepend(gifDiv);
+                gifDiv.prepend(ratingP);
+                gifDiv.prepend(titleP);
+                
+                //Prints each image with rating in the container
+                $("#images").prepend(gifDiv);
             }
         });
-    });
-
-    $(document).on("click", 'gifyImage', function(event){
-        var clickedImage = $(event.target);
-        if(clickedImage.data('state') === "animate"){
-            clickedImage.data('state', "still");
-            clickedImage.attr('src', clickedImage.data('still'));
+    }
+    
+    //Changes the state of the gifs upon clicking of the image
+    $(document).on("click", ".gif", function() {
+        var state = $(this).attr("data-state");
+    
+        if (state === "still") {
+            $(this).attr("src", $(this).attr("data-animate"));
+            $(this).attr("data-state", "animate");
+        } else {
+            $(this).attr("src", $(this).attr("data-still"));
+            $(this).attr("data-state", "still");
         }
-
-        else{
-            clickedImage.data('state', "animate");
-            clickedImage.attr('src', clickedImage.data('animate'));
-        }
     });
-    newButtons();
-});
+    
+    renderButtons();
+    
+    });
