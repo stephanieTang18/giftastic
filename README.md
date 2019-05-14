@@ -1,5 +1,6 @@
 # Giftastic
 **Objective**
+
 Using API calls to generate random gifs.
 
 **Getting Started**
